@@ -23,12 +23,12 @@
             padding: 20px;
         }
 
-        /* === LIGNES ROUGES (en arrière-plan, plus fines) === */
+        /* === LIGNES ROUGES (très légères en arrière-plan) === */
         .line-h {
             position: fixed;
             height: 1px;
-            background: rgba(255, 0, 0, 0.4);
-            box-shadow: 0 0 15px rgba(255, 0, 0, 0.3);
+            background: rgba(255, 50, 50, 0.2);
+            box-shadow: 0 0 8px rgba(255, 0, 0, 0.1);
             z-index: 1;
             pointer-events: none;
             width: 100%;
@@ -39,8 +39,8 @@
         .line-v {
             position: fixed;
             width: 1px;
-            background: rgba(255, 0, 0, 0.4);
-            box-shadow: 0 0 15px rgba(255, 0, 0, 0.3);
+            background: rgba(255, 50, 50, 0.2);
+            box-shadow: 0 0 8px rgba(255, 0, 0, 0.1);
             z-index: 1;
             pointer-events: none;
             height: 100%;
@@ -164,7 +164,7 @@
             font-family: 'Courier New', monospace;
         }
 
-        /* === MAIN CONTENT (z-index plus élevé que les lignes) === */
+        /* === MAIN CONTENT === */
         #main-content {
             display: none;
             position: relative;
@@ -179,39 +179,43 @@
         }
         #main-content.visible { display: block; }
 
-        /* === PHOTO EN HAUT === */
+        /* === PHOTO EN HAUT (PLUS GRANDE) === */
         .header-image {
             width: 100%;
-            max-height: 150px;
+            max-height: 250px;
             object-fit: cover;
             border-radius: 16px;
             margin-bottom: 16px;
             border: 2px solid rgba(255, 0, 0, 0.2);
         }
 
+        /* === ÉCRITURES PLUS CLAIRES === */
         .main-logo {
-            font-size: 48px;
+            font-size: 52px;
             font-weight: 900;
-            letter-spacing: 10px;
-            color: #fff;
-            text-shadow: 0 0 40px rgba(255, 0, 0, 0.6);
+            letter-spacing: 12px;
+            color: #ffffff;
+            text-shadow: 0 0 60px rgba(255, 255, 255, 0.15), 0 0 40px rgba(255, 0, 0, 0.5);
             text-align: center;
             font-family: 'Courier New', monospace;
             margin-bottom: 4px;
         }
-        .main-logo span { color: #ff0000; }
+        .main-logo span { 
+            color: #ff1a1a;
+            text-shadow: 0 0 60px rgba(255, 0, 0, 0.6);
+        }
 
         .main-sub {
             text-align: center;
-            color: #ff0000;
-            font-size: 13px;
-            letter-spacing: 6px;
+            color: #ff3333;
+            font-size: 14px;
+            letter-spacing: 8px;
             text-transform: uppercase;
             border-bottom: 2px solid rgba(255, 0, 0, 0.15);
             padding-bottom: 18px;
             margin-bottom: 24px;
             font-family: 'Courier New', monospace;
-            text-shadow: 0 0 20px rgba(255,0,0,0.2);
+            text-shadow: 0 0 30px rgba(255,0,0,0.3);
         }
 
         .form-group {
@@ -219,29 +223,30 @@
             text-align: left;
         }
         .form-group label {
-            color: #ccc;
-            font-size: 13px;
+            color: #dddddd;
+            font-size: 14px;
             font-weight: 600;
-            letter-spacing: 1px;
+            letter-spacing: 1.5px;
             display: block;
             margin-bottom: 6px;
             font-family: 'Courier New', monospace;
+            text-shadow: 0 0 20px rgba(255,255,255,0.05);
         }
         .form-group input, .form-group select, .form-group textarea {
             width: 100%;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.12);
             border-radius: 12px;
             padding: 12px 16px;
-            color: #eee;
-            font-size: 15px;
+            color: #f0f0f0;
+            font-size: 16px;
             font-family: 'Courier New', monospace;
             outline: none;
             transition: 0.25s;
         }
         .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
-            border-color: #ff0000;
-            box-shadow: 0 0 30px rgba(255, 0, 0, 0.08);
+            border-color: #ff3333;
+            box-shadow: 0 0 40px rgba(255, 0, 0, 0.1);
         }
         .form-group select option {
             background: #111;
@@ -266,26 +271,28 @@
         }
         .generated-box.visible { display: block; }
         .generated-box .msg-title {
-            color: #ff4444;
-            font-size: 11px;
-            letter-spacing: 2px;
+            color: #ff5555;
+            font-size: 12px;
+            letter-spacing: 3px;
             text-transform: uppercase;
             margin-bottom: 8px;
             font-family: 'Courier New', monospace;
+            text-shadow: 0 0 20px rgba(255,0,0,0.2);
         }
         .generated-box .msg-content {
-            color: #ddd;
-            font-size: 14px;
-            line-height: 1.9;
+            color: #eeeeee;
+            font-size: 15px;
+            line-height: 2.0;
             white-space: pre-wrap;
             word-break: break-word;
             font-family: 'Courier New', monospace;
+            text-shadow: 0 0 20px rgba(255,255,255,0.05);
         }
         .generated-box .cursor-blink {
             display: inline-block;
             width: 2px;
             height: 18px;
-            background: #ff0000;
+            background: #ff3333;
             animation: blink 0.7s step-end infinite;
             vertical-align: text-bottom;
             margin-left: 2px;
@@ -302,27 +309,27 @@
             justify-content: center;
         }
         .btn {
-            padding: 13px 32px;
+            padding: 14px 36px;
             border: none;
             border-radius: 60px;
-            font-size: 15px;
+            font-size: 16px;
             font-weight: 700;
             cursor: pointer;
             transition: 0.2s ease;
-            letter-spacing: 0.5px;
+            letter-spacing: 1px;
             flex: 1 1 auto;
             min-width: 140px;
             font-family: 'Courier New', monospace;
         }
         .btn-generate {
-            background: #ff0000;
+            background: #ff1a1a;
             color: #fff;
-            box-shadow: 0 0 40px rgba(255, 0, 0, 0.3);
+            box-shadow: 0 0 50px rgba(255, 0, 0, 0.3);
         }
         .btn-generate:hover {
             background: #cc0000;
             transform: scale(1.03);
-            box-shadow: 0 0 60px rgba(255, 0, 0, 0.5);
+            box-shadow: 0 0 70px rgba(255, 0, 0, 0.5);
         }
         .btn-generate:disabled {
             opacity: 0.4;
@@ -330,12 +337,12 @@
             transform: none;
         }
         .btn-copy {
-            background: rgba(255, 255, 255, 0.06);
-            color: #ccc;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.08);
+            color: #ddd;
+            border: 1px solid rgba(255, 255, 255, 0.12);
         }
         .btn-copy:hover {
-            background: rgba(255, 255, 255, 0.12);
+            background: rgba(255, 255, 255, 0.15);
         }
         .btn-copy:disabled {
             opacity: 0.3;
@@ -344,7 +351,7 @@
         .btn-whatsapp {
             background: #25D366;
             color: #fff;
-            box-shadow: 0 0 30px rgba(37, 211, 102, 0.2);
+            box-shadow: 0 0 40px rgba(37, 211, 102, 0.2);
         }
         .btn-whatsapp:hover {
             background: #1da851;
@@ -365,7 +372,7 @@
             border: 1px solid rgba(255, 0, 0, 0.3);
             padding: 12px 28px;
             border-radius: 40px;
-            color: #aaa;
+            color: #ddd;
             font-size: 14px;
             z-index: 1002;
             opacity: 0;
@@ -376,15 +383,14 @@
         .toast.show { opacity: 1; }
 
         .status-text {
-            color: #666;
-            font-size: 12px;
+            color: #888;
+            font-size: 13px;
             text-align: center;
             margin-top: 8px;
             font-family: 'Courier New', monospace;
             min-height: 20px;
         }
 
-        /* === LIEN EN BAS === */
         .footer-link {
             text-align: center;
             margin-top: 20px;
@@ -393,23 +399,24 @@
             font-family: 'Courier New', monospace;
         }
         .footer-link a {
-            color: #ff4444;
+            color: #ff5555;
             text-decoration: none;
-            font-size: 13px;
-            letter-spacing: 2px;
+            font-size: 14px;
+            letter-spacing: 3px;
             transition: 0.3s;
+            text-shadow: 0 0 30px rgba(255, 0, 0, 0.2);
         }
         .footer-link a:hover {
             color: #ff0000;
-            text-shadow: 0 0 30px rgba(255, 0, 0, 0.3);
+            text-shadow: 0 0 50px rgba(255, 0, 0, 0.4);
         }
 
         @media (max-width: 600px) {
             #main-content { padding: 28px 18px; }
-            .main-logo { font-size: 32px; letter-spacing: 6px; }
+            .main-logo { font-size: 34px; letter-spacing: 6px; }
             #access-overlay .logo { font-size: 34px; letter-spacing: 8px; }
             #access-overlay input { width: 200px; font-size: 18px; }
-            .header-image { max-height: 100px; }
+            .header-image { max-height: 180px; }
         }
     </style>
 </head>
@@ -451,7 +458,7 @@
 
     <!-- === MAIN CONTENT === -->
     <div id="main-content">
-        <!-- PHOTO EN HAUT (remplacez le src par votre image) -->
+        <!-- PHOTO EN HAUT (PLUS GRANDE) -->
         <img class="header-image" id="header-image" src="" alt="PLUNDERER" onerror="this.style.display='none'">
 
         <div class="main-logo">P<span>L</span>UNDERER</div>
@@ -500,7 +507,6 @@
             <button class="btn btn-whatsapp" id="btn-wa" disabled onclick="sendWhatsApp()">💬 WHATSAPP</button>
         </div>
 
-        <!-- LIEN EN BAS -->
         <div class="footer-link">
             <a href="https://ablaye2020.github.io" target="_blank">ablaye2020.github.io</a>
         </div>
@@ -510,8 +516,6 @@
         // ============================================
         // CHARGEMENT DE LA PHOTO
         // ============================================
-        // Remplacez l'URL ci-dessous par le lien de votre image
-        // Exemple: "064CCB30-6A16-479A-B239-CB3DE24E4DE3.jpeg"
         const imageUrl = "064CCB30-6A16-479A-B239-CB3DE24E4DE3.jpeg";
 
         document.addEventListener('DOMContentLoaded', () => {
