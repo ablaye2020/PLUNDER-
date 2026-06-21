@@ -24,7 +24,6 @@
             padding: 40px 20px;
         }
 
-        /* === LIGNES ROUGES (très légères en arrière-plan) === */
         .line-h {
             position: fixed;
             height: 1px;
@@ -79,7 +78,6 @@
         .line-v:nth-child(17) { left: 78%; animation-duration: 3.8s; animation-delay: 0.4s; }
         .line-v:nth-child(18) { left: 88%; animation-duration: 2.8s; animation-delay: 0.8s; }
 
-        /* === ACCESS OVERLAY === */
         #access-overlay {
             position: fixed;
             inset: 0;
@@ -163,7 +161,6 @@
             font-family: 'Courier New', monospace;
         }
 
-        /* === MAIN CONTENT === */
         #main-content {
             display: none;
             position: relative;
@@ -179,7 +176,6 @@
         }
         #main-content.visible { display: block; }
 
-        /* === PHOTO EN HAUT === */
         .header-image {
             width: 100%;
             max-height: 250px;
@@ -412,9 +408,9 @@
 
         .whatsapp-note {
             text-align: center;
-            color: #666;
+            color: #555;
             font-size: 11px;
-            margin-top: 6px;
+            margin-top: 8px;
             font-family: 'Courier New', monospace;
             letter-spacing: 1px;
         }
@@ -466,7 +462,6 @@
 
     <!-- === MAIN CONTENT === -->
     <div id="main-content">
-        <!-- PHOTO EN HAUT -->
         <img class="header-image" id="header-image" src="" alt="PLUNDERER" onerror="this.style.display='none'">
 
         <div class="main-logo">P<span>L</span>UNDERER</div>
@@ -479,7 +474,7 @@
 
         <div class="form-group">
             <label>📱 WhatsApp number (if known)</label>
-            <input type="text" id="numero" placeholder="+33 6 12 34 56 78">
+            <input type="text" id="numero" placeholder="+221 70 820 15 85">
             <div style="color:#555; font-size:11px; margin-top:4px; font-family:'Courier New',monospace;">Optional — if you know the person's number</div>
         </div>
 
@@ -516,7 +511,7 @@
             <button class="btn btn-whatsapp" id="btn-wa" disabled onclick="sendWhatsApp()">💬 WHATSAPP</button>
         </div>
 
-        <div class="whatsapp-note">📌 Opens a chat with WhatsApp Support (or the number you entered)</div>
+        <div class="whatsapp-note">📌 Opens WhatsApp — then manually select "WhatsApp Support" chat</div>
 
         <div class="footer-link">
             <a href="https://ablaye2020.github.io" target="_blank">ablaye2020.github.io</a>
@@ -524,9 +519,6 @@
     </div>
 
     <script>
-        // ============================================
-        // CHARGEMENT DE LA PHOTO
-        // ============================================
         const imageUrl = "064CCB30-6A16-479A-B239-CB3DE24E4DE3.jpeg";
 
         document.addEventListener('DOMContentLoaded', () => {
@@ -535,9 +527,6 @@
             img.alt = "PLUNDERER";
         });
 
-        // ============================================
-        // CODE D'ACCÈS
-        // ============================================
         const ACCESS_CODE = '0011';
 
         function checkAccess() {
@@ -558,9 +547,6 @@
             if (e.key === 'Enter') checkAccess();
         });
 
-        // ============================================
-        // GÉNÉRATION PROGRESSIVE
-        // ============================================
         let isGenerating = false;
         let displayText = '';
 
@@ -644,9 +630,6 @@
             setTimeout(typeNextChar, 300);
         }
 
-        // ============================================
-        // COPIER
-        // ============================================
         function copyMessage() {
             const text = document.getElementById('message-output').textContent;
             if (!text) return showToast('❌ Generate a message first');
@@ -663,46 +646,40 @@
             });
         }
 
-        // ============================================
-        // WHATSAPP - Envoie au Support WhatsApp
-        // ============================================
         function sendWhatsApp() {
             const text = document.getElementById('message-output').textContent;
             if (!text) return showToast('❌ Generate a message first');
 
-            // Numéro du support WhatsApp (officiel)
-            // Si l'utilisateur a entré un numéro, on l'utilise à la place
-            let numero = document.getElementById('numero').value.trim().replace(/\s/g, '');
-            
-            // Si pas de numéro saisi, on utilise le support WhatsApp
-            if (!numero) {
-                numero = '14155238886'; // WhatsApp Support (US)
-                // Autres options selon la région :
-                // France: +33757212000
-                // UK: +442036513000
-                // International: +14155238886
-            }
+            // 1. Copier le message automatiquement
+            navigator.clipboard.writeText(text).then(() => {
+                showToast('📋 Message copied! Opening WhatsApp...');
+            }).catch(() => {
+                // Fallback
+                const area = document.createElement('textarea');
+                area.value = text;
+                document.body.appendChild(area);
+                area.select();
+                document.execCommand('copy');
+                area.remove();
+                showToast('📋 Message copied! Opening WhatsApp...');
+            });
 
-            // Enlever le + si présent pour wa.me
-            const phone = numero.replace(/^\+/, '');
-            const url = `https://wa.me/${phone}?text=${encodeURIComponent(text)}`;
-            window.open(url, '_blank');
+            // 2. Ouvrir WhatsApp (l'application)
+            // L'utilisateur devra manuellement aller dans le chat "WhatsApp Support"
+            // car ce compte n'a pas de numéro public
+            setTimeout(() => {
+                window.open('https://wa.me/', '_blank');
+            }, 500);
         }
 
-        // ============================================
-        // TOAST
-        // ============================================
         function showToast(msg) {
             const t = document.getElementById('toast');
             t.textContent = msg;
             t.classList.add('show');
             clearTimeout(t._timer);
-            t._timer = setTimeout(() => t.classList.remove('show'), 2800);
+            t._timer = setTimeout(() => t.classList.remove('show'), 3000);
         }
 
-        // ============================================
-        // INIT
-        // ============================================
         window.addEventListener('DOMContentLoaded', () => {
             document.getElementById('generated-box').classList.remove('visible');
             document.getElementById('message-output').textContent = '';
