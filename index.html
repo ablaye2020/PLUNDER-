@@ -260,7 +260,7 @@
             margin: 18px 0 22px;
             text-align: left;
             display: none;
-            max-height: 320px;
+            max-height: 400px;
             overflow-y: auto;
             min-height: 60px;
         }
@@ -468,14 +468,13 @@
         <div class="main-sub">⚡ Signal Generator ⚡</div>
 
         <div class="form-group">
-            <label>👤 Name / Username</label>
+            <label>👤 Name / Username of the abuser</label>
             <input type="text" id="nom" placeholder="Ex: John DOE or @username">
         </div>
 
         <div class="form-group">
-            <label>📱 WhatsApp number (if known)</label>
+            <label>📱 Their WhatsApp number</label>
             <input type="text" id="numero" placeholder="+221 70 820 15 85">
-            <div style="color:#555; font-size:11px; margin-top:4px; font-family:'Courier New',monospace;">Optional — if you know the person's number</div>
         </div>
 
         <div class="form-group">
@@ -487,13 +486,14 @@
                 <option value="illegal">Illegal Content</option>
                 <option value="threats">Threats / Violence</option>
                 <option value="impersonation">Impersonation</option>
+                <option value="doxxing">Doxxing / Private info leaked</option>
                 <option value="other">Other (serious)</option>
             </select>
         </div>
 
         <div class="form-group">
             <label>📝 What happened ? (be honest)</label>
-            <textarea id="details" placeholder="Describe what this person did to you..."></textarea>
+            <textarea id="details" placeholder="Describe exactly what this person did to you..."></textarea>
         </div>
 
         <div class="generated-box" id="generated-box">
@@ -511,7 +511,7 @@
             <button class="btn btn-whatsapp" id="btn-wa" disabled onclick="sendWhatsApp()">💬 WHATSAPP</button>
         </div>
 
-        <div class="whatsapp-note">📌 Opens WhatsApp — then manually select "WhatsApp Support" chat</div>
+        <div class="whatsapp-note">📌 Message copied automatically — then paste in WhatsApp Support chat</div>
 
         <div class="footer-link">
             <a href="https://ablaye2020.github.io" target="_blank">ablaye2020.github.io</a>
@@ -556,33 +556,42 @@
             const type = document.getElementById('type').value;
             const details = document.getElementById('details').value.trim();
 
-            const typePhrases = {
-                harassment: "this person has been harassing me non-stop",
-                scam: "I think this person is trying to scam me",
-                identity: "someone is pretending to be me",
-                illegal: "this person is sharing illegal stuff",
-                threats: "I'm getting threats from this person",
-                impersonation: "someone is impersonating me",
-                other: "this person is doing something really bad"
+            const typeLabels = {
+                harassment: "HARASSMENT & BULLYING",
+                scam: "FRAUD / SCAM",
+                identity: "IDENTITY THEFT",
+                illegal: "ILLEGAL CONTENT",
+                threats: "THREATS & VIOLENCE",
+                impersonation: "IMPERSONATION",
+                doxxing: "DOXXING / PRIVATE INFO LEAKED",
+                other: "SERIOUS VIOLATION"
             };
 
             let msg = '';
-            msg += `WhatsApp Support,\n\n`;
-            msg += `I'm writing because ${typePhrases[type] || 'something serious is happening'}.\n\n`;
+            msg += `🚨 URGENT EMERGENCY REPORT - ${typeLabels[type] || 'SERIOUS VIOLATION'}\n\n`;
+            msg += `I am filing an OFFICIAL COMPLAINT against a WhatsApp user who is DANGEROUS and is violating your Terms of Service.\n\n`;
 
-            if (nom) msg += `The person is ${nom}.\n`;
-            if (numero) msg += `Their number is ${numero}.\n\n`;
+            if (nom) msg += `🔴 ABUSER: ${nom}\n`;
+            if (numero) msg += `📱 NUMBER: ${numero}\n\n`;
 
-            msg += `Here's what happened:\n${details || 'I don\'t even know where to start, this is really bad.'}\n\n`;
+            msg += `📌 WHAT HAPPENED:\n${details || 'This person is engaging in serious criminal behavior on your platform.'}\n\n`;
 
-            msg += `I'm really upset and scared right now. I don't feel safe.\n`;
-            msg += `I need you to do something about this quickly please.\n`;
-            msg += `This can't continue, I'm begging you to help me.\n\n`;
+            msg += `⚠️ THIS IS NOT A MINOR ISSUE — THIS IS A SAFETY EMERGENCY.\n\n`;
+            msg += `I DEMAND:\n`;
+            msg += `→ IMMEDIATE BAN of this account\n`;
+            msg += `→ FULL INVESTIGATION\n`;
+            msg += `→ PRESERVATION OF CHAT LOGS (for legal action)\n\n`;
 
-            msg += `Please block this person or do whatever you can.\n`;
-            msg += `I'm available if you need more info.\n\n`;
-            msg += `Thank you for reading this.\n`;
-            msg += `I hope you can help me.`;
+            msg += `I am prepared to take LEGAL ACTION if WhatsApp does not act immediately.\n`;
+            msg += `This person is DANGEROUS and needs to be removed from the platform NOW.\n\n`;
+
+            msg += `I have screenshots, chat logs, and evidence ready for law enforcement.\n`;
+            msg += `I will file a police report TODAY if this is not resolved.\n\n`;
+
+            msg += `RESPOND TO THIS MESSAGE WITH CONFIRMATION OF ACTION TAKEN.\n`;
+            msg += `I need a REAL HUMAN to handle this — not an automated response.\n\n`;
+
+            msg += `My safety depends on your immediate action.`;
 
             return msg;
         }
@@ -615,19 +624,19 @@
                     displayText += chars[index];
                     output.textContent = displayText;
                     index++;
-                    const delay = chars[index - 1] === '\n' ? 60 : 15 + Math.random() * 25;
+                    const delay = chars[index - 1] === '\n' ? 40 : 10 + Math.random() * 20;
                     setTimeout(typeNextChar, delay);
                 } else {
                     isGenerating = false;
                     btnGen.disabled = false;
                     btnCopy.disabled = false;
                     btnWa.disabled = false;
-                    status.textContent = '✅ Message ready';
-                    showToast('✅ Message generated');
+                    status.textContent = '✅ Message ready — STRONG & URGENT';
+                    showToast('✅ Powerful message generated');
                 }
             }
 
-            setTimeout(typeNextChar, 300);
+            setTimeout(typeNextChar, 200);
         }
 
         function copyMessage() {
@@ -650,11 +659,10 @@
             const text = document.getElementById('message-output').textContent;
             if (!text) return showToast('❌ Generate a message first');
 
-            // 1. Copier le message automatiquement
+            // Copy message
             navigator.clipboard.writeText(text).then(() => {
                 showToast('📋 Message copied! Opening WhatsApp...');
             }).catch(() => {
-                // Fallback
                 const area = document.createElement('textarea');
                 area.value = text;
                 document.body.appendChild(area);
@@ -664,9 +672,6 @@
                 showToast('📋 Message copied! Opening WhatsApp...');
             });
 
-            // 2. Ouvrir WhatsApp (l'application)
-            // L'utilisateur devra manuellement aller dans le chat "WhatsApp Support"
-            // car ce compte n'a pas de numéro public
             setTimeout(() => {
                 window.open('https://wa.me/', '_blank');
             }, 500);
