@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PLUNDERER · Signal Generator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: #070707;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            padding: 20px;
+        }
+
+        .line-h, .line-v {
+            position: fixed;
+            background: red;
+            box-shadow: 0 0 25px rgba(255, 0, 0, 0.9), 0 0 80px rgba(255, 0, 0, 0.3);
+            z-index: 0;
+            pointer-events: none;
+        }
+        .line-h {
+            height: 2px;
+            animation: slideH 3s linear infinite;
+        }
+        .line-v {
+            width: 2px;
+            animation: slideV 3s linear infinite;
+        }
+
+        @keyframes slideH {
+            0% { left: -10%; }
+            100% { left: 110%; }
+        }
+        @keyframes slideV {
+            0% { top: -10%; }
+            100% { top: 110%; }
+        }
+
+        .line-h:nth-child(1) { top: 10%; animation-duration: 2.2s; }
+        .line-h:nth-child(2) { top: 32%; animation-duration: 3.0s; animation-delay: 0.5s; }
+        .line-h:nth-child(3) { top: 55%; animation-duration: 2.6s; animation-delay: 1.0s; }
+        .line-h:nth-child(4) { top: 78%; animation-duration: 3.4s; animation-delay: 0.3s; }
+
+        .line-v:nth-child(5) { left: 10%; animation-duration: 2.4s; }
+        .line-v:nth-child(6) { left: 32%; animation-duration: 3.2s; animation-delay: 0.7s; }
+        .line-v:nth-child(7) { left: 55%; animation-duration: 2.8s; animation-delay: 1.2s; }
+        .line-v:nth-child(8) { left: 78%; animation-duration: 3.6s; animation-delay: 0.4s; }
+
+        #access-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.94);
+            backdrop-filter: blur(14px);
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            gap: 20px;
+        }
+        #access-overlay.hidden { display: none; }
+
+        #access-overlay h2 {
+            color: #ff1a1a;
+            font-size: 22px;
+            letter-spacing: 4px;
+            font-weight: 300;
+        }
+        #access-overlay input {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 0, 0, 0.3);
+            border-radius: 12px;
+            padding: 14px 24px;
+            font-size: 20px;
+            color: #fff;
+            text-align: center;
+            width: 220px;
+            outline: none;
+            letter-spacing: 6px;
+        }
+        #access-overlay input:focus { border-color: #ff1a1a; }
+        #access-overlay .btn-access {
+            background: #ff1a1a;
+            color: #fff;
+            border: none;
+            padding: 12px 48px;
+            border-radius: 40px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        #access-overlay .btn-access:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 40px rgba(255, 0, 0, 0.4);
+        }
+        .error-msg {
+            color: #ff4444;
+            font-size: 14px;
+            min-height: 20px;
+        }
+
+        .glass {
+            position: relative;
+            z-index: 10;
+            background: rgba(10, 10, 10, 0.88);
+            backdrop-filter: blur(18px);
+            border: 1px solid rgba(255, 0, 0, 0.2);
+            border-radius: 32px;
+            padding: 42px 40px;
+            max-width: 750px;
+            width: 100%;
+            box-shadow: 0 0 100px rgba(255, 0, 0, 0.08);
+        }
+
+        .logo {
+            font-size: 48px;
+            font-weight: 900;
+            letter-spacing: 10px;
+            color: #fff;
+            text-shadow: 0 0 40px rgba(255, 0, 0, 0.6);
+            text-align: center;
+        }
+        .logo span { color: #ff1a1a; }
+
+        .sub {
+            text-align: center;
+            color: #777;
+            font-size: 12px;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            border-bottom: 1px solid rgba(255, 0, 0, 0.15);
+            padding-bottom: 20px;
+            margin-bottom: 28px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+            text-align: left;
+        }
+        .form-group label {
+            color: #aaa;
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            display: block;
+            margin-bottom: 6px;
+        }
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 12px 16px;
+            color: #eee;
+            font-size: 15px;
+            font-family: inherit;
+            outline: none;
+            transition: 0.25s;
+        }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            border-color: #ff1a1a;
+            box-shadow: 0 0 25px rgba(255, 0, 0, 0.05);
+        }
+        .form-group select option {
+            background: #1a1a1a;
+            color: #eee;
+        }
+        .form-group textarea {
+            min-height: 70px;
+            resize: vertical;
+        }
+
+        .generated-box {
+            background: rgba(255, 0, 0, 0.04);
+            border: 1px solid rgba(255, 0, 0, 0.15);
+            border-radius: 16px;
+            padding: 18px 20px;
+            margin: 18px 0 22px;
+            text-align: left;
+            display: none;
+            max-height: 350px;
+            overflow-y: auto;
+        }
+        .generated-box.visible { display: block; }
+        .generated-box .msg-title {
+            color: #ff4444;
+            font-size: 11px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 6px;
+        }
+        .generated-box .msg-content {
+            color: #ddd;
+            font-size: 14px;
+            line-height: 1.9;
+            white-space: pre-wrap;
+            word-break: break-word;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .btn {
+            padding: 13px 32px;
+            border: none;
+            border-radius: 60px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s ease;
+            letter-spacing: 0.5px;
+            flex: 1 1 auto;
+            min-width: 140px;
+        }
+        .btn-generate {
+            background: #ff1a1a;
+            color: #fff;
+            box-shadow: 0 0 30px rgba(255, 0, 0, 0.25);
+        }
+        .btn-generate:hover {
+            background: #e60000;
+            transform: scale(1.03);
+        }
+        .btn-copy {
+            background: rgba(255, 255, 255, 0.06);
+            color: #ccc;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .btn-copy:hover {
+            background: rgba(255, 255, 255, 0.12);
+        }
+        .btn-whatsapp {
+            background: #25D366;
+            color: #fff;
+        }
+        .btn-whatsapp:hover {
+            background: #1da851;
+            transform: scale(1.03);
+        }
+        .btn-whatsapp:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1a1a1a;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 12px 28px;
+            border-radius: 40px;
+            color: #aaa;
+            font-size: 14px;
+            z-index: 999;
+            opacity: 0;
+            transition: 0.4s;
+            pointer-events: none;
+        }
+        .toast.show { opacity: 1; }
+
+        @media (max-width: 600px) {
+            .glass { padding: 28px 18px; }
+            .logo { font-size: 32px; letter-spacing: 6px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="line-h"></div>
+    <div class="line-h"></div>
+    <div class="line-h"></div>
+    <div class="line-h"></div>
+    <div class="line-v"></div>
+    <div class="line-v"></div>
+    <div class="line-v"></div>
+    <div class="line-v"></div>
+
+    <div id="access-overlay">
+        <h2>⛔ ACCESS RESTRICTED</h2>
+        <input type="password" id="access-input" placeholder="••••" maxlength="4" autofocus>
+        <button class="btn-access" onclick="checkAccess()">ENTER</button>
+        <div class="error-msg" id="access-error"></div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <div class="glass" id="main-content">
+        <div class="logo">P<span>L</span>UNDERER</div>
+        <div class="sub">⚡ Signal Generator ⚡</div>
+
+        <div class="form-group">
+            <label>👤 Name / Username</label>
+            <input type="text" id="nom" placeholder="Ex: John DOE or @username">
+        </div>
+
+        <div class="form-group">
+            <label>📱 WhatsApp number (if known)</label>
+            <input type="text" id="numero" placeholder="+33 6 12 34 56 78">
+        </div>
+
+        <div class="form-group">
+            <label>⚠️ Type of violation</label>
+            <select id="type">
+                <option value="harassment">Harassment / Bullying</option>
+                <option value="scam">Scam / Fraud</option>
+                <option value="identity">Identity Theft</option>
+                <option value="illegal">Illegal Content</option>
+                <option value="threats">Threats / Violence</option>
+                <option value="impersonation">Impersonation</option>
+                <option value="other">Other (serious)</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>📝 What happened ? (be honest)</label>
+            <textarea id="details" placeholder="Describe what this person did to you..."></textarea>
+        </div>
+
+        <div class="generated-box" id="generated-box">
+            <div class="msg-title">📨 YOUR MESSAGE</div>
+            <div class="msg-content" id="message-output"></div>
+        </div>
+
+        <div class="btn-group">
+            <button class="btn btn-generate" onclick="generateMessage()">⚡ GENERATE</button>
+            <button class="btn btn-copy" onclick="copyMessage()">📋 COPY</button>
+            <button class="btn btn-whatsapp" id="btn-wa" disabled onclick="sendWhatsApp()">💬 WHATSAPP</button>
+        </div>
+
+        <div style="margin-top:18px; font-size:11px; color:#444; text-align:center; border-top:1px solid rgba(255,255,255,0.04); padding-top:16px;">
+            PLUNDERER v1 · Report to WhatsApp Support
+        </div>
+    </div>
+
+    <script>
+        const ACCESS_CODE = '0011';
+
+        function checkAccess() {
+            const input = document.getElementById('access-input');
+            const error = document.getElementById('access-error');
+            if (input.value === ACCESS_CODE) {
+                document.getElementById('access-overlay').classList.add('hidden');
+                error.textContent = '';
+            } else {
+                error.textContent = '❌ Incorrect code';
+                input.value = '';
+                input.focus();
+            }
+        }
+
+        document.getElementById('access-input').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') checkAccess();
+        });
+
+        function generateMessage() {
+            const nom = document.getElementById('nom').value.trim();
+            const numero = document.getElementById('numero').value.trim();
+            const type = document.getElementById('type').value;
+            const details = document.getElementById('details').value.trim();
+
+            const typePhrases = {
+                harassment: "this person has been harassing me non-stop",
+                scam: "I think this person is trying to scam me",
+                identity: "someone is pretending to be me",
+                illegal: "this person is sharing illegal stuff",
+                threats: "I'm getting threats from this person",
+                impersonation: "someone is impersonating me",
+                other: "this person is doing something really bad"
+            };
+
+            let msg = `Hello WhatsApp Support,\n\n`;
+            msg += `I'm writing because ${typePhrases[type] || 'something serious is happening'}.\n\n`;
+
+            if (nom) msg += `The person is ${nom}.\n`;
+            if (numero) msg += `Their number is ${numero}.\n\n`;
+
+            msg += `Here's what happened:\n${details || 'I don\'t even know where to start, this is really bad.'}\n\n`;
+
+            msg += `I'm really upset and scared right now. I don't feel safe.\n`;
+            msg += `I need you to do something about this quickly please.\n`;
+            msg += `This can't continue, I'm begging you to help me.\n\n`;
+
+            msg += `Please block this person or do whatever you can.\n`;
+            msg += `I'm available if you need more info.\n\n`;
+            msg += `Thank you for reading this.\n`;
+            msg += `I hope you can help me.`;
+
+            document.getElementById('message-output').textContent = msg;
+            document.getElementById('generated-box').classList.add('visible');
+            document.getElementById('btn-wa').disabled = false;
+
+            showToast('✅ Message ready');
+        }
+
+        function copyMessage() {
+            const text = document.getElementById('message-output').textContent;
+            if (!text) return showToast('❌ Generate first');
+            navigator.clipboard.writeText(text).then(() => {
+                showToast('📋 Copied');
+            }).catch(() => {
+                const area = document.createElement('textarea');
+                area.value = text;
+                document.body.appendChild(area);
+                area.select();
+                document.execCommand('copy');
+                area.remove();
+                showToast('📋 Copied');
+            });
+        }
+
+        function sendWhatsApp() {
+            const text = document.getElementById('message-output').textContent;
+            if (!text) return showToast('❌ Generate first');
+            const numero = document.getElementById('numero').value.trim().replace(/\s/g, '');
+            const phone = numero || '';
+            const url = `https://wa.me/${phone}?text=${encodeURIComponent(text)}`;
+            window.open(url, '_blank');
+        }
+
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            t.textContent = msg;
+            t.classList.add('show');
+            clearTimeout(t._timer);
+            t._timer = setTimeout(() => t.classList.remove('show'), 2800);
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('details').value = 'This person has been sending me threats every day. They know where I live. I\'m scared to go out. I have screenshots of everything. Please help me.';
+            generateMessage();
+        });
+    </script>
+
+</body>
+</html>
