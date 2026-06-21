@@ -17,10 +17,11 @@
             min-height: 100vh;
             display: flex;
             justify-content: center;
-            align-items: center;
+            align-items: flex-start;
             position: relative;
-            overflow: hidden;
-            padding: 20px;
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding: 40px 20px;
         }
 
         /* === LIGNES ROUGES (très légères en arrière-plan) === */
@@ -58,7 +59,6 @@
             100% { top: 100%; }
         }
 
-        /* === LIGNES HORIZONTALES === */
         .line-h:nth-child(1) { top: 8%; animation-duration: 2.8s; }
         .line-h:nth-child(2) { top: 18%; animation-duration: 3.4s; animation-delay: 0.5s; }
         .line-h:nth-child(3) { top: 28%; animation-duration: 2.6s; animation-delay: 1.0s; }
@@ -69,7 +69,6 @@
         .line-h:nth-child(8) { top: 78%; animation-duration: 3.6s; animation-delay: 0.1s; }
         .line-h:nth-child(9) { top: 88%; animation-duration: 2.8s; animation-delay: 0.7s; }
 
-        /* === LIGNES VERTICALES === */
         .line-v:nth-child(10) { left: 8%; animation-duration: 3.0s; }
         .line-v:nth-child(11) { left: 18%; animation-duration: 3.6s; animation-delay: 0.6s; }
         .line-v:nth-child(12) { left: 28%; animation-duration: 2.8s; animation-delay: 0.3s; }
@@ -176,10 +175,11 @@
             max-width: 750px;
             width: 100%;
             box-shadow: 0 0 80px rgba(255, 0, 0, 0.08);
+            margin: 20px auto;
         }
         #main-content.visible { display: block; }
 
-        /* === PHOTO EN HAUT (PLUS GRANDE) === */
+        /* === PHOTO EN HAUT === */
         .header-image {
             width: 100%;
             max-height: 250px;
@@ -189,7 +189,6 @@
             border: 2px solid rgba(255, 0, 0, 0.2);
         }
 
-        /* === ÉCRITURES PLUS CLAIRES === */
         .main-logo {
             font-size: 52px;
             font-weight: 900;
@@ -411,8 +410,17 @@
             text-shadow: 0 0 50px rgba(255, 0, 0, 0.4);
         }
 
+        .whatsapp-note {
+            text-align: center;
+            color: #666;
+            font-size: 11px;
+            margin-top: 6px;
+            font-family: 'Courier New', monospace;
+            letter-spacing: 1px;
+        }
+
         @media (max-width: 600px) {
-            #main-content { padding: 28px 18px; }
+            #main-content { padding: 28px 18px; margin: 10px; }
             .main-logo { font-size: 34px; letter-spacing: 6px; }
             #access-overlay .logo { font-size: 34px; letter-spacing: 8px; }
             #access-overlay input { width: 200px; font-size: 18px; }
@@ -422,7 +430,7 @@
 </head>
 <body>
 
-    <!-- === LIGNES ROUGES (en arrière-plan) === -->
+    <!-- === LIGNES ROUGES === -->
     <div class="line-h"></div>
     <div class="line-h"></div>
     <div class="line-h"></div>
@@ -458,7 +466,7 @@
 
     <!-- === MAIN CONTENT === -->
     <div id="main-content">
-        <!-- PHOTO EN HAUT (PLUS GRANDE) -->
+        <!-- PHOTO EN HAUT -->
         <img class="header-image" id="header-image" src="" alt="PLUNDERER" onerror="this.style.display='none'">
 
         <div class="main-logo">P<span>L</span>UNDERER</div>
@@ -472,6 +480,7 @@
         <div class="form-group">
             <label>📱 WhatsApp number (if known)</label>
             <input type="text" id="numero" placeholder="+33 6 12 34 56 78">
+            <div style="color:#555; font-size:11px; margin-top:4px; font-family:'Courier New',monospace;">Optional — if you know the person's number</div>
         </div>
 
         <div class="form-group">
@@ -506,6 +515,8 @@
             <button class="btn btn-copy" id="btn-copy" disabled onclick="copyMessage()">📋 COPY</button>
             <button class="btn btn-whatsapp" id="btn-wa" disabled onclick="sendWhatsApp()">💬 WHATSAPP</button>
         </div>
+
+        <div class="whatsapp-note">📌 Opens a chat with WhatsApp Support (or the number you entered)</div>
 
         <div class="footer-link">
             <a href="https://ablaye2020.github.io" target="_blank">ablaye2020.github.io</a>
@@ -570,7 +581,7 @@
             };
 
             let msg = '';
-            msg += `WhatsApp,\n\n`;
+            msg += `WhatsApp Support,\n\n`;
             msg += `I'm writing because ${typePhrases[type] || 'something serious is happening'}.\n\n`;
 
             if (nom) msg += `The person is ${nom}.\n`;
@@ -653,13 +664,27 @@
         }
 
         // ============================================
-        // WHATSAPP
+        // WHATSAPP - Envoie au Support WhatsApp
         // ============================================
         function sendWhatsApp() {
             const text = document.getElementById('message-output').textContent;
             if (!text) return showToast('❌ Generate a message first');
-            const numero = document.getElementById('numero').value.trim().replace(/\s/g, '');
-            const phone = numero || '';
+
+            // Numéro du support WhatsApp (officiel)
+            // Si l'utilisateur a entré un numéro, on l'utilise à la place
+            let numero = document.getElementById('numero').value.trim().replace(/\s/g, '');
+            
+            // Si pas de numéro saisi, on utilise le support WhatsApp
+            if (!numero) {
+                numero = '14155238886'; // WhatsApp Support (US)
+                // Autres options selon la région :
+                // France: +33757212000
+                // UK: +442036513000
+                // International: +14155238886
+            }
+
+            // Enlever le + si présent pour wa.me
+            const phone = numero.replace(/^\+/, '');
             const url = `https://wa.me/${phone}?text=${encodeURIComponent(text)}`;
             window.open(url, '_blank');
         }
