@@ -35,46 +35,47 @@
 
         .bg-image {
             position: absolute;
-            width: 120%;
-            height: 120%;
-            top: -10%;
-            left: -10%;
+            width: 130%;
+            height: 130%;
+            top: -15%;
+            left: -15%;
             object-fit: cover;
-            opacity: 0.25;
-            filter: blur(2px) brightness(0.4) saturate(1.2);
-            animation: bgDrift 25s infinite alternate ease-in-out;
+            opacity: 0.3;
+            filter: blur(1px) brightness(0.5) saturate(1.3);
+            animation: bgDrift 30s infinite alternate ease-in-out;
         }
 
         @keyframes bgDrift {
             0% { transform: translate(0%, 0%) scale(1) rotate(0deg); }
-            25% { transform: translate(-5%, -3%) scale(1.05) rotate(1deg); }
-            50% { transform: translate(3%, 5%) scale(0.95) rotate(-1deg); }
-            75% { transform: translate(-3%, -5%) scale(1.03) rotate(0.5deg); }
-            100% { transform: translate(5%, 3%) scale(1.02) rotate(-0.5deg); }
+            20% { transform: translate(-8%, -5%) scale(1.08) rotate(1.5deg); }
+            40% { transform: translate(5%, 8%) scale(0.95) rotate(-1.5deg); }
+            60% { transform: translate(-5%, -8%) scale(1.06) rotate(1deg); }
+            80% { transform: translate(8%, 5%) scale(0.98) rotate(-1deg); }
+            100% { transform: translate(0%, 0%) scale(1.02) rotate(0.5deg); }
         }
 
-        /* ===== RED LAYER WITH MOVING PATTERNS ===== */
+        /* ===== RED LAYER ===== */
         .red-overlay {
             position: absolute;
             inset: 0;
-            background: radial-gradient(circle at 30% 40%, rgba(180, 0, 0, 0.25), rgba(0, 0, 0, 0.6) 70%);
+            background: radial-gradient(circle at 30% 40%, rgba(180, 0, 0, 0.3), rgba(0, 0, 0, 0.7) 70%);
             mix-blend-mode: multiply;
             animation: pulseOverlay 8s infinite alternate ease-in-out;
         }
 
         @keyframes pulseOverlay {
-            0% { opacity: 0.5; }
+            0% { opacity: 0.4; }
             50% { opacity: 0.8; }
-            100% { opacity: 0.5; }
+            100% { opacity: 0.4; }
         }
 
-        /* ===== FLOATING RED ORBS (4 directions) ===== */
+        /* ===== FLOATING RED ORBS ===== */
         .orb {
             position: absolute;
             border-radius: 50%;
             filter: blur(70px);
-            opacity: 0.3;
-            animation: orbMove 18s infinite alternate ease-in-out;
+            opacity: 0.25;
+            animation: orbMove 22s infinite alternate ease-in-out;
         }
 
         .orb:nth-child(1) {
@@ -105,7 +106,7 @@
             left: 60%;
             animation-duration: 20s;
             animation-delay: -8s;
-            opacity: 0.15;
+            opacity: 0.12;
         }
 
         .orb:nth-child(4) {
@@ -116,21 +117,21 @@
             right: 20%;
             animation-duration: 24s;
             animation-delay: -12s;
-            opacity: 0.2;
+            opacity: 0.18;
         }
 
         @keyframes orbMove {
             0% { transform: translate(0, 0) scale(1); }
-            25% { transform: translate(120px, -80px) scale(1.1); }
-            50% { transform: translate(-60px, 120px) scale(0.9); }
-            75% { transform: translate(80px, 60px) scale(1.05); }
-            100% { transform: translate(-100px, -100px) scale(0.95); }
+            25% { transform: translate(140px, -90px) scale(1.15); }
+            50% { transform: translate(-70px, 140px) scale(0.85); }
+            75% { transform: translate(90px, 70px) scale(1.1); }
+            100% { transform: translate(-120px, -120px) scale(0.9); }
         }
 
-        /* ===== MOVING RED LINES (all directions) ===== */
+        /* ===== MOVING RED LINES ===== */
         .moving-line {
             position: absolute;
-            background: rgba(255, 30, 30, 0.12);
+            background: rgba(255, 30, 30, 0.1);
             box-shadow: 0 0 20px rgba(255, 0, 0, 0.05);
             pointer-events: none;
         }
@@ -172,7 +173,6 @@
             100% { transform: translateX(50%) rotate(5deg); }
         }
 
-        /* line positions */
         .moving-line.h:nth-child(5) { top: 10%; animation-duration: 14s; animation-delay: -2s; }
         .moving-line.h:nth-child(6) { top: 25%; animation-duration: 18s; animation-delay: -6s; }
         .moving-line.h:nth-child(7) { top: 40%; animation-duration: 16s; animation-delay: -1s; }
@@ -209,6 +209,11 @@
             10% { opacity: 0.8; }
             90% { opacity: 0.8; }
             100% { transform: translate(var(--tx), var(--ty)) scale(1.2); opacity: 0; }
+        }
+
+        /* ===== MUSIC PLAYER (hidden) ===== */
+        #bg-music {
+            display: none;
         }
 
         /* ===== ACCESS OVERLAY ===== */
@@ -573,19 +578,19 @@
 
     <!-- ===== ANIMATED BACKGROUND ===== -->
     <div class="bg-container">
-        <!-- Image en fond avec animation -->
+        <!-- Image en fond -->
         <img class="bg-image" id="bg-image" src="" alt="background" onerror="this.style.display='none'">
 
-        <!-- Couche rouge animée -->
+        <!-- Couche rouge -->
         <div class="red-overlay"></div>
 
-        <!-- Orbes flottants (4 directions) -->
+        <!-- Orbes flottants -->
         <div class="orb"></div>
         <div class="orb"></div>
         <div class="orb"></div>
         <div class="orb"></div>
 
-        <!-- Lignes mouvantes (H, V, Diag) -->
+        <!-- Lignes mouvantes -->
         <div class="moving-line h"></div>
         <div class="moving-line h"></div>
         <div class="moving-line h"></div>
@@ -608,6 +613,13 @@
         <!-- Particules -->
         <div id="particle-container"></div>
     </div>
+
+    <!-- ===== MUSIC (hidden, autoplay on first click) ===== -->
+    <audio id="bg-music" loop>
+        <source src="song.mp3.m4a" type="audio/mp4">
+        <source src="song.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
 
     <!-- ===== ACCESS OVERLAY ===== -->
     <div id="access-overlay">
@@ -682,20 +694,37 @@
 
     <script>
         // ===== IMAGES =====
-        const bgImageUrl = "064CCB30-6A16-479A-B239-CB3DE24E4DE3.jpeg"; // image de fond
-        const headerImageUrl = "064CCB30-6A16-479A-B239-CB3DE24E4DE3.jpeg"; // image dans le contenu
+        const imageUrl = "064CCB30-6A16-479A-B239-CB3DE24E4DE3.jpeg";
 
         document.addEventListener('DOMContentLoaded', () => {
             // Image de fond
             const bgImg = document.getElementById('bg-image');
-            bgImg.src = bgImageUrl;
+            bgImg.src = imageUrl;
             bgImg.alt = "Background";
 
             // Image d'en-tête
             const headerImg = document.getElementById('header-image');
-            headerImg.src = headerImageUrl;
+            headerImg.src = imageUrl;
             headerImg.alt = "PLUNDERER";
         });
+
+        // ===== MUSIC - Autoplay on first click =====
+        let musicStarted = false;
+
+        function startMusic() {
+            if (musicStarted) return;
+            const audio = document.getElementById('bg-music');
+            audio.play().then(() => {
+                musicStarted = true;
+                console.log('🎵 Music started');
+            }).catch(err => {
+                console.log('⚠️ Music autoplay blocked, waiting for user interaction');
+            });
+        }
+
+        // Démarrer la musique au premier clic n'importe où sur la page
+        document.addEventListener('click', startMusic, { once: true });
+        document.addEventListener('touchstart', startMusic, { once: true });
 
         // ===== PARTICULES =====
         (function createParticles() {
@@ -724,7 +753,7 @@
         })();
 
         // ===== ACCESS =====
-        const ACCESS_CODE = '0011';
+        const ACCESS_CODE = '1200';
 
         function checkAccess() {
             const input = document.getElementById('access-input');
@@ -733,6 +762,8 @@
                 document.getElementById('access-overlay').classList.add('hidden');
                 document.getElementById('main-content').classList.add('visible');
                 error.textContent = '';
+                // Démarrer la musique si ce n'est pas déjà fait
+                startMusic();
             } else {
                 error.textContent = '❌ Incorrect code';
                 input.value = '';
