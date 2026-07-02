@@ -24,7 +24,7 @@
             padding: 20px;
         }
 
-        /* ===== ANIMATED BACKGROUND WITH IMAGE ===== */
+        /* ===== ANIMATED BACKGROUND ===== */
         .bg-container {
             position: fixed;
             inset: 0;
@@ -54,7 +54,6 @@
             100% { transform: translate(0%, 0%) scale(1.03) rotate(0.5deg); }
         }
 
-        /* ===== RED OVERLAY (plus léger) ===== */
         .red-overlay {
             position: absolute;
             inset: 0;
@@ -69,7 +68,6 @@
             100% { opacity: 0.3; }
         }
 
-        /* ===== FLOATING RED ORBS ===== */
         .orb {
             position: absolute;
             border-radius: 50%;
@@ -86,7 +84,6 @@
             left: -10%;
             animation-duration: 22s;
         }
-
         .orb:nth-child(2) {
             width: 500px;
             height: 500px;
@@ -96,7 +93,6 @@
             animation-duration: 26s;
             animation-delay: -4s;
         }
-
         .orb:nth-child(3) {
             width: 450px;
             height: 450px;
@@ -107,7 +103,6 @@
             animation-delay: -8s;
             opacity: 0.1;
         }
-
         .orb:nth-child(4) {
             width: 400px;
             height: 400px;
@@ -127,7 +122,6 @@
             100% { transform: translate(-130px, -130px) scale(0.85); }
         }
 
-        /* ===== MOVING RED LINES (plus fines) ===== */
         .moving-line {
             position: absolute;
             background: rgba(255, 30, 30, 0.06);
@@ -141,14 +135,12 @@
             left: -50%;
             animation: slideH 12s linear infinite;
         }
-
         .moving-line.v {
             width: 1px;
             height: 200%;
             top: -50%;
             animation: slideV 14s linear infinite;
         }
-
         .moving-line.diag {
             width: 200%;
             height: 1px;
@@ -161,12 +153,10 @@
             0% { transform: translateX(0); }
             100% { transform: translateX(50%); }
         }
-
         @keyframes slideV {
             0% { transform: translateY(0); }
             100% { transform: translateY(50%); }
         }
-
         @keyframes slideDiag {
             0% { transform: translateX(0) rotate(0deg); }
             100% { transform: translateX(50%) rotate(5deg); }
@@ -191,7 +181,6 @@
         .moving-line.diag:nth-child(19) { top: 50%; animation-duration: 24s; animation-delay: -10s; }
         .moving-line.diag:nth-child(20) { top: 75%; animation-duration: 18s; animation-delay: -2s; }
 
-        /* ===== FLOATING PARTICLES ===== */
         .particle {
             position: absolute;
             width: 3px;
@@ -210,12 +199,11 @@
             100% { transform: translate(var(--tx), var(--ty)) scale(1.3); opacity: 0; }
         }
 
-        /* ===== MUSIC PLAYER (hidden) ===== */
         #bg-music {
             display: none;
         }
 
-        /* ===== ACCESS OVERLAY (transparent) ===== */
+        /* ===== ACCESS OVERLAY ===== */
         #access-overlay {
             position: fixed;
             inset: 0;
@@ -271,7 +259,6 @@
             letter-spacing: 10px;
             font-family: 'Courier New', monospace;
             transition: 0.3s;
-            box-shadow: 0 0 40px rgba(255, 0, 0, 0.05);
         }
         #access-overlay input:focus {
             border-color: #ff1a1a;
@@ -300,10 +287,9 @@
             font-size: 14px;
             min-height: 20px;
             font-family: 'Courier New', monospace;
-            text-shadow: 0 0 20px rgba(255,0,0,0.3);
         }
 
-        /* ===== MAIN CONTENT (sans encadrement) ===== */
+        /* ===== MAIN CONTENT ===== */
         #main-content {
             display: none;
             position: relative;
@@ -403,7 +389,7 @@
             margin: 14px 0 18px;
             text-align: left;
             display: none;
-            max-height: 400px;
+            max-height: 500px;
             overflow-y: auto;
             min-height: 50px;
             backdrop-filter: blur(4px);
@@ -421,7 +407,7 @@
         .generated-box .msg-content {
             color: #eeeeee;
             font-size: 14px;
-            line-height: 2.0;
+            line-height: 1.8;
             white-space: pre-wrap;
             word-break: break-word;
             font-family: 'Courier New', monospace;
@@ -634,7 +620,7 @@
         <div class="main-sub">⚡ Signal Generator ⚡</div>
 
         <div class="form-group">
-            <label>👤 Name / Username</label>
+            <label>👤 Name / Username of the abuser</label>
             <input type="text" id="nom" placeholder="Ex: John DOE or @username">
         </div>
 
@@ -658,8 +644,8 @@
         </div>
 
         <div class="form-group">
-            <label>📝 What happened ?</label>
-            <textarea id="details" placeholder="Describe exactly what this person did..."></textarea>
+            <label>📝 What happened ? (be specific)</label>
+            <textarea id="details" placeholder="Describe exactly what this person did, when, and how it affected you..."></textarea>
         </div>
 
         <div class="generated-box" id="generated-box">
@@ -754,7 +740,7 @@
             if (e.key === 'Enter') checkAccess();
         });
 
-        // ===== GENERATOR =====
+        // ===== GENERATOR - NOUVEAUX MESSAGES HUMAINS =====
         let isGenerating = false;
         let displayText = '';
 
@@ -765,41 +751,69 @@
             const details = document.getElementById('details').value.trim();
 
             const typeLabels = {
-                harassment: "HARASSMENT & BULLYING",
-                scam: "FRAUD / SCAM",
-                identity: "IDENTITY THEFT",
-                illegal: "ILLEGAL CONTENT",
-                threats: "THREATS & VIOLENCE",
-                impersonation: "IMPERSONATION",
-                doxxing: "DOXXING / PRIVATE INFO LEAKED",
-                other: "SERIOUS VIOLATION"
+                harassment: "harcèlement et intimidation",
+                scam: "arnaque et fraude",
+                identity: "usurpation d'identité",
+                illegal: "contenu illégal",
+                threats: "menaces et violence",
+                impersonation: "usurpation d'identité",
+                doxxing: "doxxing / fuite d'informations privées",
+                other: "violation grave"
             };
 
+            const typeFr = typeLabels[type] || "violation grave";
+
             let msg = '';
-            msg += `🚨 URGENT EMERGENCY REPORT - ${typeLabels[type] || 'SERIOUS VIOLATION'}\n\n`;
-            msg += `I am filing an OFFICIAL COMPLAINT against a WhatsApp user who is DANGEROUS and is violating your Terms of Service.\n\n`;
 
-            if (nom) msg += `🔴 ABUSER: ${nom}\n`;
-            if (numero) msg += `📱 NUMBER: ${numero}\n\n`;
+            // ===== MESSAGE EN FRANÇAIS =====
+            msg += `Bonjour l'équipe WhatsApp,\n\n`;
 
-            msg += `📌 WHAT HAPPENED:\n${details || 'This person is engaging in serious criminal behavior on your platform.'}\n\n`;
+            msg += `Je vous écris pour vous signaler un cas TRÈS GRAVE concernant un utilisateur de votre plateforme. Je suis victime d'actes répétés qui mettent ma sécurité en danger et je vous demande d'agir IMMÉDIATEMENT.\n\n`;
 
-            msg += `⚠️ THIS IS NOT A MINOR ISSUE — THIS IS A SAFETY EMERGENCY.\n\n`;
-            msg += `I DEMAND:\n`;
-            msg += `→ IMMEDIATE BAN of this account\n`;
-            msg += `→ FULL INVESTIGATION\n`;
-            msg += `→ PRESERVATION OF CHAT LOGS (for legal action)\n\n`;
+            if (nom) {
+                msg += `🔴 L'utilisateur concerné s'appelle : ${nom}\n`;
+            } else {
+                msg += `🔴 L'utilisateur concerné est inconnu (numéro ci-dessous)\n`;
+            }
 
-            msg += `I am prepared to take LEGAL ACTION if WhatsApp does not act immediately.\n`;
-            msg += `This person is DANGEROUS and needs to be removed from the platform NOW.\n\n`;
+            if (numero) {
+                msg += `📱 Son numéro WhatsApp : ${numero}\n`;
+            }
 
-            msg += `I have screenshots, chat logs, and evidence ready for law enforcement.\n`;
-            msg += `I will file a police report TODAY if this is not resolved.\n\n`;
+            msg += `\n📌 CE QU'IL/ELLE A FAIT :\n`;
+            if (details) {
+                msg += `${details}\n\n`;
+            } else {
+                msg += `Cette personne m'a harcelé, menacé et a partagé des informations privées me concernant sans mon consentement. J'ai des preuves de tout cela (captures d'écran, enregistrements, messages).\n\n`;
+            }
 
-            msg += `RESPOND TO THIS MESSAGE WITH CONFIRMATION OF ACTION TAKEN.\n`;
-            msg += `I need a REAL HUMAN to handle this — not an automated response.\n\n`;
+            msg += `⚠️ TYPE DE VIOLATION : ${typeFr.toUpperCase()}\n\n`;
 
-            msg += `My safety depends on your immediate action.`;
+            msg += `Cela fait maintenant plusieurs jours/semaines que ça dure et je suis épuisé(e). Cette personne utilise votre plateforme pour m'attaquer et je ne me sens plus en sécurité. J'ai peur pour moi et pour ma famille.\n\n`;
+
+            msg += `J'AI DÉJÀ :\n`;
+            msg += `→ Bloqué ce numéro mais il/elle crée de nouveaux comptes\n`;
+            msg += `→ Signalé plusieurs fois mais rien ne change\n`;
+            msg += `→ Je suis allé(e) voir la police qui m'a dit de contacter WhatsApp\n\n`;
+
+            msg += `CE QUE JE DEMANDE :\n`;
+            msg += `→ BANNIR DÉFINITIVEMENT ce compte et cette personne de WhatsApp\n`;
+            msg += `→ CONSERVER TOUS LES ÉCHANGES pour que la police puisse enquêter\n`;
+            msg += `→ ME RÉPONDRE RAPIDEMENT avec des actions concrètes\n\n`;
+
+            msg += `Je vous en supplie, prenez ce signalement au sérieux. Je ne sais plus quoi faire. Cette personne continue à me harceler et je n'ai plus de paix.\n\n`;
+
+            msg += `J'ai TOUTES LES PREUVES et je suis prêt(e) à les partager avec vous ou avec la police.\n\n`;
+
+            msg += `S'il vous plaît, ne me répondez pas avec un message automatique. J'ai besoin d'un être humain qui va vraiment prendre mon cas en main.\n\n`;
+
+            msg += `Dans l'attente de votre retour,\n\n`;
+
+            if (nom) {
+                msg += `Cordialement,\nUne victime de ${nom}`;
+            } else {
+                msg += `Cordialement,\nUne victime qui a besoin d'aide`;
+            }
 
             return msg;
         }
@@ -818,7 +832,7 @@
             btnGen.disabled = true;
             btnCopy.disabled = true;
             btnWa.disabled = true;
-            status.textContent = '⏳ Generating...';
+            status.textContent = '⏳ Génération du message...';
             output.textContent = '';
             box.classList.add('visible');
 
@@ -832,26 +846,26 @@
                     displayText += chars[index];
                     output.textContent = displayText;
                     index++;
-                    const delay = chars[index - 1] === '\n' ? 40 : 10 + Math.random() * 20;
+                    const delay = chars[index - 1] === '\n' ? 30 : 8 + Math.random() * 15;
                     setTimeout(typeNextChar, delay);
                 } else {
                     isGenerating = false;
                     btnGen.disabled = false;
                     btnCopy.disabled = false;
                     btnWa.disabled = false;
-                    status.textContent = '✅ Message ready — STRONG & URGENT';
-                    showToast('✅ Powerful message generated');
+                    status.textContent = '✅ Message prêt — TRÈS CONVAINCANT';
+                    showToast('✅ Message puissant généré');
                 }
             }
 
-            setTimeout(typeNextChar, 200);
+            setTimeout(typeNextChar, 150);
         }
 
         function copyMessage() {
             const text = document.getElementById('message-output').textContent;
-            if (!text) return showToast('❌ Generate a message first');
+            if (!text) return showToast('❌ Générez un message d\'abord');
             navigator.clipboard.writeText(text).then(() => {
-                showToast('📋 Copied to clipboard');
+                showToast('📋 Copié dans le presse-papiers');
             }).catch(() => {
                 const area = document.createElement('textarea');
                 area.value = text;
@@ -859,16 +873,16 @@
                 area.select();
                 document.execCommand('copy');
                 area.remove();
-                showToast('📋 Copied');
+                showToast('📋 Copié');
             });
         }
 
         function sendWhatsApp() {
             const text = document.getElementById('message-output').textContent;
-            if (!text) return showToast('❌ Generate a message first');
+            if (!text) return showToast('❌ Générez un message d\'abord');
 
             navigator.clipboard.writeText(text).then(() => {
-                showToast('📋 Message copied! Opening WhatsApp...');
+                showToast('📋 Message copié ! Ouverture WhatsApp...');
             }).catch(() => {
                 const area = document.createElement('textarea');
                 area.value = text;
@@ -876,7 +890,7 @@
                 area.select();
                 document.execCommand('copy');
                 area.remove();
-                showToast('📋 Message copied! Opening WhatsApp...');
+                showToast('📋 Message copié ! Ouverture WhatsApp...');
             });
 
             setTimeout(() => {
@@ -895,7 +909,7 @@
         window.addEventListener('DOMContentLoaded', () => {
             document.getElementById('generated-box').classList.remove('visible');
             document.getElementById('message-output').textContent = '';
-            document.getElementById('status-text').textContent = 'Fill the form and click GENERATE';
+            document.getElementById('status-text').textContent = 'Remplissez le formulaire et cliquez sur GENERATE';
         });
     </script>
 
