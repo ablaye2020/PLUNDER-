@@ -13,7 +13,7 @@
 
         body {
             font-family: 'Courier New', monospace;
-            background: #0b0b0b;
+            background: #0a0000;
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -24,101 +24,137 @@
             padding: 40px 20px;
         }
 
-        /* ANIMATED BACKGROUND PARTICLES + GLOW */
-        .bg-canvas {
+        /* ===== ANIMATED BACKGROUND WITH IMAGE ===== */
+        .bg-container {
             position: fixed;
             inset: 0;
             z-index: 0;
-            pointer-events: none;
             overflow: hidden;
-            background: radial-gradient(circle at 20% 30%, #1a0505, #000000 70%);
+            background: #0a0000;
         }
 
-        .glow-ring {
+        .bg-image {
+            position: absolute;
+            width: 120%;
+            height: 120%;
+            top: -10%;
+            left: -10%;
+            object-fit: cover;
+            opacity: 0.25;
+            filter: blur(2px) brightness(0.4) saturate(1.2);
+            animation: bgDrift 25s infinite alternate ease-in-out;
+        }
+
+        @keyframes bgDrift {
+            0% { transform: translate(0%, 0%) scale(1) rotate(0deg); }
+            25% { transform: translate(-5%, -3%) scale(1.05) rotate(1deg); }
+            50% { transform: translate(3%, 5%) scale(0.95) rotate(-1deg); }
+            75% { transform: translate(-3%, -5%) scale(1.03) rotate(0.5deg); }
+            100% { transform: translate(5%, 3%) scale(1.02) rotate(-0.5deg); }
+        }
+
+        /* ===== RED LAYER WITH MOVING PATTERNS ===== */
+        .red-overlay {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 30% 40%, rgba(180, 0, 0, 0.25), rgba(0, 0, 0, 0.6) 70%);
+            mix-blend-mode: multiply;
+            animation: pulseOverlay 8s infinite alternate ease-in-out;
+        }
+
+        @keyframes pulseOverlay {
+            0% { opacity: 0.5; }
+            50% { opacity: 0.8; }
+            100% { opacity: 0.5; }
+        }
+
+        /* ===== FLOATING RED ORBS (4 directions) ===== */
+        .orb {
             position: absolute;
             border-radius: 50%;
-            filter: blur(80px);
-            opacity: 0.25;
-            animation: floatGlow 18s infinite alternate ease-in-out;
+            filter: blur(70px);
+            opacity: 0.3;
+            animation: orbMove 18s infinite alternate ease-in-out;
         }
 
-        .glow-ring:nth-child(1) {
-            width: 600px;
-            height: 600px;
+        .orb:nth-child(1) {
+            width: 500px;
+            height: 500px;
             background: #ff0040;
             top: -10%;
             left: -10%;
             animation-duration: 22s;
+            animation-delay: 0s;
         }
 
-        .glow-ring:nth-child(2) {
-            width: 500px;
-            height: 500px;
-            background: #ff3300;
+        .orb:nth-child(2) {
+            width: 450px;
+            height: 450px;
+            background: #ff2200;
             bottom: -15%;
             right: -10%;
             animation-duration: 26s;
             animation-delay: -4s;
         }
 
-        .glow-ring:nth-child(3) {
+        .orb:nth-child(3) {
             width: 400px;
             height: 400px;
-            background: #aa00ff;
-            top: 40%;
+            background: #cc00ff;
+            top: 50%;
             left: 60%;
             animation-duration: 20s;
             animation-delay: -8s;
             opacity: 0.15;
         }
 
-        @keyframes floatGlow {
-            0% { transform: translate(0, 0) scale(1) rotate(0deg); }
-            33% { transform: translate(60px, -40px) scale(1.1) rotate(5deg); }
-            66% { transform: translate(-30px, 50px) scale(0.9) rotate(-3deg); }
-            100% { transform: translate(40px, -20px) scale(1.05) rotate(4deg); }
+        .orb:nth-child(4) {
+            width: 350px;
+            height: 350px;
+            background: #ff0066;
+            top: 20%;
+            right: 20%;
+            animation-duration: 24s;
+            animation-delay: -12s;
+            opacity: 0.2;
         }
 
-        /* Floating particles (matrix style) */
-        .particle {
+        @keyframes orbMove {
+            0% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(120px, -80px) scale(1.1); }
+            50% { transform: translate(-60px, 120px) scale(0.9); }
+            75% { transform: translate(80px, 60px) scale(1.05); }
+            100% { transform: translate(-100px, -100px) scale(0.95); }
+        }
+
+        /* ===== MOVING RED LINES (all directions) ===== */
+        .moving-line {
             position: absolute;
-            width: 2px;
-            height: 2px;
-            background: #ff3333;
-            box-shadow: 0 0 6px #ff0000, 0 0 12px #ff000066;
-            border-radius: 50%;
-            opacity: 0.3;
-            animation: particleFloat linear infinite;
-        }
-
-        @keyframes particleFloat {
-            0% { transform: translateY(0) scale(0.5); opacity: 0; }
-            10% { opacity: 0.6; }
-            90% { opacity: 0.6; }
-            100% { transform: translateY(-120vh) scale(1.2); opacity: 0; }
-        }
-
-        /* moving grid lines (enhanced) */
-        .grid-line-h, .grid-line-v {
-            position: fixed;
-            background: rgba(255, 40, 40, 0.08);
-            z-index: 1;
+            background: rgba(255, 30, 30, 0.12);
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.05);
             pointer-events: none;
-            box-shadow: 0 0 12px rgba(255, 0, 0, 0.05);
         }
 
-        .grid-line-h {
+        .moving-line.h {
             height: 1px;
             width: 200%;
             left: -50%;
-            animation: slideH 14s linear infinite;
+            animation: slideH 12s linear infinite;
         }
 
-        .grid-line-v {
+        .moving-line.v {
             width: 1px;
             height: 200%;
             top: -50%;
             animation: slideV 14s linear infinite;
+        }
+
+        .moving-line.diag {
+            width: 200%;
+            height: 1px;
+            left: -50%;
+            transform-origin: center;
+            animation: slideDiag 18s linear infinite;
         }
 
         @keyframes slideH {
@@ -131,32 +167,62 @@
             100% { transform: translateY(50%); }
         }
 
-        .grid-line-h:nth-child(4) { top: 12%; animation-duration: 18s; animation-delay: -2s; }
-        .grid-line-h:nth-child(5) { top: 28%; animation-duration: 22s; animation-delay: -6s; }
-        .grid-line-h:nth-child(6) { top: 44%; animation-duration: 16s; animation-delay: -1s; }
-        .grid-line-h:nth-child(7) { top: 60%; animation-duration: 20s; animation-delay: -9s; }
-        .grid-line-h:nth-child(8) { top: 76%; animation-duration: 24s; animation-delay: -4s; }
-        .grid-line-h:nth-child(9) { top: 92%; animation-duration: 19s; animation-delay: -7s; }
+        @keyframes slideDiag {
+            0% { transform: translateX(0) rotate(0deg); }
+            100% { transform: translateX(50%) rotate(5deg); }
+        }
 
-        .grid-line-v:nth-child(10) { left: 10%; animation-duration: 20s; animation-delay: -3s; }
-        .grid-line-v:nth-child(11) { left: 25%; animation-duration: 17s; animation-delay: -8s; }
-        .grid-line-v:nth-child(12) { left: 40%; animation-duration: 23s; animation-delay: -2s; }
-        .grid-line-v:nth-child(13) { left: 55%; animation-duration: 19s; animation-delay: -6s; }
-        .grid-line-v:nth-child(14) { left: 70%; animation-duration: 21s; animation-delay: -1s; }
-        .grid-line-v:nth-child(15) { left: 85%; animation-duration: 18s; animation-delay: -5s; }
+        /* line positions */
+        .moving-line.h:nth-child(5) { top: 10%; animation-duration: 14s; animation-delay: -2s; }
+        .moving-line.h:nth-child(6) { top: 25%; animation-duration: 18s; animation-delay: -6s; }
+        .moving-line.h:nth-child(7) { top: 40%; animation-duration: 16s; animation-delay: -1s; }
+        .moving-line.h:nth-child(8) { top: 55%; animation-duration: 20s; animation-delay: -9s; }
+        .moving-line.h:nth-child(9) { top: 70%; animation-duration: 22s; animation-delay: -4s; }
+        .moving-line.h:nth-child(10) { top: 85%; animation-duration: 15s; animation-delay: -7s; }
 
-        /* --- overlay access --- */
+        .moving-line.v:nth-child(11) { left: 8%; animation-duration: 16s; animation-delay: -3s; }
+        .moving-line.v:nth-child(12) { left: 22%; animation-duration: 20s; animation-delay: -8s; }
+        .moving-line.v:nth-child(13) { left: 36%; animation-duration: 18s; animation-delay: -2s; }
+        .moving-line.v:nth-child(14) { left: 50%; animation-duration: 22s; animation-delay: -6s; }
+        .moving-line.v:nth-child(15) { left: 64%; animation-duration: 17s; animation-delay: -1s; }
+        .moving-line.v:nth-child(16) { left: 78%; animation-duration: 19s; animation-delay: -5s; }
+        .moving-line.v:nth-child(17) { left: 92%; animation-duration: 21s; animation-delay: -9s; }
+
+        .moving-line.diag:nth-child(18) { top: 20%; animation-duration: 20s; animation-delay: -4s; }
+        .moving-line.diag:nth-child(19) { top: 50%; animation-duration: 24s; animation-delay: -10s; }
+        .moving-line.diag:nth-child(20) { top: 75%; animation-duration: 18s; animation-delay: -2s; }
+
+        /* ===== FLOATING PARTICLES ===== */
+        .particle {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            border-radius: 50%;
+            background: #ff3333;
+            box-shadow: 0 0 12px #ff0000, 0 0 30px rgba(255, 0, 0, 0.2);
+            opacity: 0;
+            animation: particleFloat linear infinite;
+        }
+
+        @keyframes particleFloat {
+            0% { transform: translate(0, 0) scale(0.3); opacity: 0; }
+            10% { opacity: 0.8; }
+            90% { opacity: 0.8; }
+            100% { transform: translate(var(--tx), var(--ty)) scale(1.2); opacity: 0; }
+        }
+
+        /* ===== ACCESS OVERLAY ===== */
         #access-overlay {
             position: fixed;
             inset: 0;
-            background: #0a0000;
+            background: rgba(10, 0, 0, 0.92);
+            backdrop-filter: blur(8px);
             z-index: 1000;
             display: flex;
             justify-content: center;
             align-items: center;
             flex-direction: column;
             gap: 20px;
-            backdrop-filter: blur(4px);
         }
         #access-overlay.hidden { display: none; }
 
@@ -233,7 +299,7 @@
             text-shadow: 0 0 20px rgba(255,0,0,0.3);
         }
 
-        /* --- main content --- */
+        /* ===== MAIN CONTENT ===== */
         #main-content {
             display: none;
             position: relative;
@@ -505,31 +571,45 @@
 </head>
 <body>
 
-    <!-- === ANIMATED BACKGROUND === -->
-    <div class="bg-canvas">
-        <div class="glow-ring"></div>
-        <div class="glow-ring"></div>
-        <div class="glow-ring"></div>
-        <!-- particles generated by JS -->
+    <!-- ===== ANIMATED BACKGROUND ===== -->
+    <div class="bg-container">
+        <!-- Image en fond avec animation -->
+        <img class="bg-image" id="bg-image" src="" alt="background" onerror="this.style.display='none'">
+
+        <!-- Couche rouge animée -->
+        <div class="red-overlay"></div>
+
+        <!-- Orbes flottants (4 directions) -->
+        <div class="orb"></div>
+        <div class="orb"></div>
+        <div class="orb"></div>
+        <div class="orb"></div>
+
+        <!-- Lignes mouvantes (H, V, Diag) -->
+        <div class="moving-line h"></div>
+        <div class="moving-line h"></div>
+        <div class="moving-line h"></div>
+        <div class="moving-line h"></div>
+        <div class="moving-line h"></div>
+        <div class="moving-line h"></div>
+
+        <div class="moving-line v"></div>
+        <div class="moving-line v"></div>
+        <div class="moving-line v"></div>
+        <div class="moving-line v"></div>
+        <div class="moving-line v"></div>
+        <div class="moving-line v"></div>
+        <div class="moving-line v"></div>
+
+        <div class="moving-line diag"></div>
+        <div class="moving-line diag"></div>
+        <div class="moving-line diag"></div>
+
+        <!-- Particules -->
         <div id="particle-container"></div>
     </div>
 
-    <!-- === GRID LINES === -->
-    <div class="grid-line-h"></div>
-    <div class="grid-line-h"></div>
-    <div class="grid-line-h"></div>
-    <div class="grid-line-h"></div>
-    <div class="grid-line-h"></div>
-    <div class="grid-line-h"></div>
-
-    <div class="grid-line-v"></div>
-    <div class="grid-line-v"></div>
-    <div class="grid-line-v"></div>
-    <div class="grid-line-v"></div>
-    <div class="grid-line-v"></div>
-    <div class="grid-line-v"></div>
-
-    <!-- === ACCESS OVERLAY === -->
+    <!-- ===== ACCESS OVERLAY ===== -->
     <div id="access-overlay">
         <div class="lock-icon">⛔</div>
         <div class="logo">P<span>L</span>UNDERER</div>
@@ -539,10 +619,10 @@
         <div class="error-msg" id="access-error"></div>
     </div>
 
-    <!-- === TOAST === -->
+    <!-- ===== TOAST ===== -->
     <div class="toast" id="toast"></div>
 
-    <!-- === MAIN CONTENT === -->
+    <!-- ===== MAIN CONTENT ===== -->
     <div id="main-content">
         <img class="header-image" id="header-image" src="" alt="PLUNDERER" onerror="this.style.display='none'">
 
@@ -601,37 +681,49 @@
     </div>
 
     <script>
-        // === BACKGROUND PARTICLES ===
+        // ===== IMAGES =====
+        const bgImageUrl = "064CCB30-6A16-479A-B239-CB3DE24E4DE3.jpeg"; // image de fond
+        const headerImageUrl = "064CCB30-6A16-479A-B239-CB3DE24E4DE3.jpeg"; // image dans le contenu
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Image de fond
+            const bgImg = document.getElementById('bg-image');
+            bgImg.src = bgImageUrl;
+            bgImg.alt = "Background";
+
+            // Image d'en-tête
+            const headerImg = document.getElementById('header-image');
+            headerImg.src = headerImageUrl;
+            headerImg.alt = "PLUNDERER";
+        });
+
+        // ===== PARTICULES =====
         (function createParticles() {
             const container = document.getElementById('particle-container');
-            const count = 60;
+            const count = 50;
             for (let i = 0; i < count; i++) {
                 const particle = document.createElement('div');
                 particle.className = 'particle';
-                const size = 1.5 + Math.random() * 3;
+                const size = 2 + Math.random() * 4;
                 particle.style.width = size + 'px';
                 particle.style.height = size + 'px';
                 particle.style.left = Math.random() * 100 + '%';
                 particle.style.top = Math.random() * 100 + '%';
-                particle.style.animationDuration = 12 + Math.random() * 25 + 's';
+                const duration = 15 + Math.random() * 25;
+                particle.style.animationDuration = duration + 's';
                 particle.style.animationDelay = Math.random() * 20 + 's';
-                particle.style.opacity = 0.2 + Math.random() * 0.4;
-                const hue = 340 + Math.random() * 20;
-                particle.style.background = `hsl(${hue}, 90%, 55%)`;
-                particle.style.boxShadow = `0 0 12px hsl(${hue}, 90%, 55%)`;
+                const tx = (Math.random() - 0.5) * 400;
+                const ty = (Math.random() - 0.5) * 400;
+                particle.style.setProperty('--tx', tx + 'px');
+                particle.style.setProperty('--ty', ty + 'px');
+                const hue = 340 + Math.random() * 30;
+                particle.style.background = `hsl(${hue}, 95%, 55%)`;
+                particle.style.boxShadow = `0 0 20px hsl(${hue}, 95%, 55%)`;
                 container.appendChild(particle);
             }
         })();
 
-        // === IMAGE ===
-        const imageUrl = "064CCB30-6A16-479A-B239-CB3DE24E4DE3.jpeg";
-        document.addEventListener('DOMContentLoaded', () => {
-            const img = document.getElementById('header-image');
-            img.src = imageUrl;
-            img.alt = "PLUNDERER";
-        });
-
-        // === ACCESS ===
+        // ===== ACCESS =====
         const ACCESS_CODE = '0011';
 
         function checkAccess() {
@@ -652,7 +744,7 @@
             if (e.key === 'Enter') checkAccess();
         });
 
-        // === GENERATOR LOGIC ===
+        // ===== GENERATOR =====
         let isGenerating = false;
         let displayText = '';
 
